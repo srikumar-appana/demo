@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LYF Medicine Search - Sign In</title>
+    <style>
+      /* ---------- Global Styles ---------- */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 25%, #a5d6a7 50%, #81c784 75%, #66bb6a 100%);
+        color: #1b5e20;
+        padding: 16px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      .glass-layer {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.3), transparent 60%),
+          radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.2), transparent 60%);
+        mix-blend-mode: overlay;
+        opacity: 0.6;
+        z-index: 1;
+      }
+
+      /* Medical Animation Container */
+      .medical-animation {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      /* Bottle/Injection Container */
+      .medicine-source {
+        position: absolute;
+        top: -80px;
+        width: 60px;
+        height: 80px;
+        animation: floatSource 3s ease-in-out infinite;
+      }
+
+      .medicine-source:nth-child(1) {
+        left: 10%;
+        animation-delay: 0s;
+      }
+
+      .medicine-source:nth-child(2) {
+        left: 30%;
+        animation-delay: 0.5s;
+      }
+
+      .medicine-source:nth-child(3) {
+        left: 50%;
+        animation-delay: 1s;
+      }
+
+      .medicine-source:nth-child(4) {
+        left: 70%;
+        animation-delay: 1.5s;
+      }
+
+      .medicine-source:nth-child(5) {
+        left: 90%;
+        animation-delay: 2s;
+      }
+
+      /* Bottle */
+      .bottle {
+        width: 40px;
+        height: 60px;
+        background: linear-gradient(to bottom, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+        border-radius: 8px 8px 4px 4px;
+        position: relative;
+        margin: 0 auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .bottle::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 12px;
+        background: #64b5f6;
+        border-radius: 4px 4px 0 0;
+      }
+
+      .bottle::after {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 8px;
+        background: #1976d2;
+        border-radius: 50%;
+      }
+
+      /* Injection/Syringe */
+      .injection {
+        width: 50px;
+        height: 70px;
+        position: relative;
+        margin: 0 auto;
+      }
+
+      .syringe-body {
+        width: 12px;
+        height: 50px;
+        background: linear-gradient(to bottom, #fff 0%, #e0e0e0 100%);
+        border-radius: 2px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .syringe-needle {
+        width: 2px;
+        height: 20px;
+        background: #424242;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        border-radius: 1px 1px 0 0;
+      }
+
+      .syringe-plunger {
+        width: 10px;
+        height: 15px;
+        background: #1976d2;
+        border-radius: 2px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 8px;
+      }
+
+      /* Capsule */
+      .capsule {
+        position: absolute;
+        width: 16px;
+        height: 8px;
+        border-radius: 8px;
+        animation: dropCapsule 4s linear infinite;
+        opacity: 0;
+      }
+
+      .capsule::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        background: #4caf50;
+        border-radius: 8px 0 0 8px;
+      }
+
+      .capsule::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        background: #81c784;
+        border-radius: 0 8px 8px 0;
+      }
+
+      /* Pill */
+      .pill {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        animation: dropPill 4s linear infinite;
+        opacity: 0;
+      }
+
+      .pill.pill-blue {
+        background: linear-gradient(135deg, #42a5f5, #1e88e5);
+      }
+
+      .pill.pill-red {
+        background: linear-gradient(135deg, #ef5350, #c62828);
+      }
+
+      .pill.pill-yellow {
+        background: linear-gradient(135deg, #ffb74d, #f57c00);
+      }
+
+      .pill.pill-green {
+        background: linear-gradient(135deg, #66bb6a, #2e7d32);
+      }
+
+      /* Tablet */
+      .tablet {
+        position: absolute;
+        width: 14px;
+        height: 6px;
+        border-radius: 3px;
+        animation: dropTablet 4s linear infinite;
+        opacity: 0;
+        background: linear-gradient(135deg, #90caf9, #42a5f5);
+      }
+
+      @keyframes floatSource {
+        0%, 100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(10px) rotate(2deg);
+        }
+      }
+
+      @keyframes dropCapsule {
+        0% {
+          opacity: 1;
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          opacity: 0.8;
+          transform: translateY(100vh) rotate(360deg);
+        }
+      }
+
+      @keyframes dropPill {
+        0% {
+          opacity: 1;
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          opacity: 0.8;
+          transform: translateY(100vh) rotate(-360deg);
+        }
+      }
+
+      @keyframes dropTablet {
+        0% {
+          opacity: 1;
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          opacity: 0.8;
+          transform: translateY(100vh) rotate(180deg);
+        }
+      }
+
+      /* ---------- Layout ---------- */
+      .login-shell {
+        position: relative;
+        width: min(960px, 100%);
+        max-width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        gap: 32px;
+        padding: 32px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        overflow: hidden;
+        z-index: 10;
+      }
+
+      @media (max-width: 840px) {
+        .login-shell {
+          grid-template-columns: 1fr;
+          padding: 24px 20px;
+          gap: 24px;
+        }
+
+        .side-panel {
+          order: -1;
+          padding: 12px 8px;
+          align-items: center;
+          text-align: center;
+        }
+
+        .logo-circle {
+          width: 180px;
+          height: 180px;
+          margin: 0 auto 12px;
+        }
+
+        .brand-heading {
+          font-size: 1.6rem;
+          justify-content: center;
+        }
+
+        .tagline {
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .login-shell {
+          padding: 20px 16px;
+          border-radius: 20px;
+        }
+
+        .form-panel {
+          padding: 20px 18px 22px;
+        }
+
+        .form-title {
+          font-size: 1.2rem;
+        }
+
+        .form-subtitle {
+          font-size: 0.85rem;
+        }
+
+        .logo-circle {
+          width: 160px;
+          height: 160px;
+        }
+
+        .brand-heading {
+          font-size: 1.4rem;
+        }
+
+        .truck-login-wrapper {
+          width: 100%;
+          max-width: 260px;
+        }
+
+        .medicine-source {
+          width: 50px;
+          height: 70px;
+        }
+
+        .bottle {
+          width: 35px;
+          height: 50px;
+        }
+
+        .injection {
+          width: 40px;
+          height: 60px;
+        }
+      }
+
+      /* ---------- Brand / Left Panel ---------- */
+      .side-panel {
+        position: relative;
+        padding: 20px 12px 20px 4px;
+        color: #2e7d32;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .logo-circle {
+        position: relative;
+        width: 210px;
+        height: 210px;
+        border-radius: 50%;
+        margin-bottom: 8px;
+        padding: 10px;
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+        border: 3px solid rgba(76, 175, 80, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(76, 175, 80, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+
+      .logo-circle::before {
+        content: "";
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        background: conic-gradient(
+          from 0deg,
+          #81c784,
+          #66bb6a,
+          #4caf50,
+          #66bb6a,
+          #81c784,
+          #a5d6a7,
+          #c8e6c9,
+          #81c784
+        );
+        z-index: -1;
+        filter: blur(8px);
+        opacity: 0.6;
+      }
+
+      .logo-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #ffffff, #e8f5e9 78%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 0 22px rgba(76, 175, 80, 0.1);
+        padding: 12px;
+      }
+
+      .logo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55));
+      }
+
+      .brand-heading {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+
+      .brand-heading span:first-child {
+        color: #4caf50;
+      }
+
+      .brand-heading span:last-child {
+        color: #2e7d32;
+      }
+
+      .brand-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(46, 125, 50, 0.7);
+      }
+
+      .tagline {
+        font-size: 0.95rem;
+        color: rgba(46, 125, 50, 0.8);
+        margin-top: 8px;
+        line-height: 1.6;
+      }
+
+      .highlight-pill {
+        align-self: flex-start;
+        padding: 6px 14px;
+        font-size: 0.78rem;
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        background: linear-gradient(135deg, #81c784, #66bb6a);
+        color: #ffffff;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+      }
+
+      /* ---------- Form Panel ---------- */
+      .form-panel {
+        position: relative;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 255, 248, 0.95));
+        border-radius: 20px;
+        padding: 28px 24px 30px;
+        border: 1px solid rgba(76, 175, 80, 0.2);
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      }
+
+      .form-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2e7d32;
+        margin-bottom: 6px;
+      }
+
+      .form-subtitle {
+        font-size: 0.9rem;
+        color: rgba(46, 125, 50, 0.7);
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 16px;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 480px) {
+        .field-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .field.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .field label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        color: #4caf50;
+        margin-bottom: 6px;
+      }
+
+      .text-input,
+      .select-input {
+        background: #f5f5f5;
+        border-radius: 12px;
+        border: 2px solid rgba(76, 175, 80, 0.2);
+        padding: 12px 16px;
+        color: #2e7d32;
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+
+      .text-input:focus,
+      .select-input:focus {
+        border-color: #4caf50;
+        box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        background: #ffffff;
+      }
+
+      .text-input::placeholder {
+        color: rgba(46, 125, 50, 0.4);
+      }
+
+      .otp-section {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+      }
+
+      .otp-input-wrapper {
+        flex: 1;
+      }
+
+      .btn-send-otp {
+        padding: 12px 20px;
+        border-radius: 12px;
+        border: 2px solid rgba(76, 175, 80, 0.3);
+        background: #4caf50;
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+      }
+
+      .btn-send-otp:hover {
+        background: #66bb6a;
+        border-color: #66bb6a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+      }
+
+      .btn-send-otp:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .nav-link {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9rem;
+        color: rgba(46, 125, 50, 0.7);
+      }
+
+      .nav-link a {
+        color: #4caf50;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+
+      .nav-link a:hover {
+        color: #2e7d32;
+        background: rgba(76, 175, 80, 0.1);
+      }
+
+      /* ---------- Truck Login Button ---------- */
+      .login-footer {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .privacy-note {
+        font-size: 0.8rem;
+        color: rgba(46, 125, 50, 0.7);
+        max-width: 58%;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 720px) {
+        .login-footer {
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .privacy-note {
+          max-width: 100%;
+          text-align: center;
+        }
+
+        .truck-login-wrapper {
+          width: 100%;
+          max-width: 280px;
+        }
+      }
+
+      .truck-login-wrapper {
+        position: relative;
+        width: 260px;
+        height: 70px;
+      }
+
+      .road {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 54%;
+        height: 5px;
+        transform: translateY(-50%);
+        background: linear-gradient(
+          to right,
+          #81c784,
+          #66bb6a,
+          #4caf50,
+          #66bb6a,
+          #81c784
+        );
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .road::after {
+        content: "";
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 1px;
+        height: 3px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0.4;
+      }
+
+      .road-label {
+        position: absolute;
+        inset: -24px 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.58em;
+        color: rgba(5, 15, 30, 0.9);
+        text-transform: uppercase;
+        mix-blend-mode: screen;
+        pointer-events: none;
+      }
+
+      .road-label span {
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+      }
+
+      .truck-login-button {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
+      }
+
+      .truck {
+        position: absolute;
+        top: 4px;
+        left: 0;
+        width: 120px;
+        height: 50px;
+        transform: translateX(-90px);
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        z-index: 1;
+      }
+
+      .truck-body {
+        position: relative;
+        flex: 1;
+        height: 38px;
+        border-radius: 10px 4px 6px 6px;
+        background: linear-gradient(135deg, #4caf50, #66bb6a);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+          0 8px 18px rgba(76, 175, 80, 0.3);
+      }
+
+      .truck-body::after {
+        content: "LYF";
+        position: absolute;
+        top: 8px;
+        left: 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .truck-cab {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px 8px 6px 6px;
+        background: linear-gradient(135deg, #81c784, #66bb6a);
+        position: relative;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+      }
+
+      .truck-cab::before {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 5px;
+        right: 5px;
+        height: 14px;
+        border-radius: 6px 6px 2px 2px;
+        background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+      }
+
+      .truck-cab::after {
+        content: "";
+        position: absolute;
+        bottom: 4px;
+        right: -6px;
+        width: 10px;
+        height: 8px;
+        border-radius: 4px;
+        background: #ffef96;
+        box-shadow: 0 0 8px rgba(255, 239, 150, 0.9);
+      }
+
+      .truck-exhaust {
+        position: absolute;
+        width: 6px;
+        height: 18px;
+        background: #0d1726;
+        right: -10px;
+        bottom: 10px;
+        border-radius: 2px;
+      }
+
+      .wheel {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #424242, #212121);
+        bottom: -9px;
+        border: 2px solid #4caf50;
+      }
+
+      .wheel::after {
+        content: "";
+        position: absolute;
+        inset: 3px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .wheel-back {
+        left: 20px;
+      }
+
+      .wheel-front {
+        right: 8px;
+      }
+
+      /* Truck animation */
+      .truck-login-button.ready .truck {
+        animation: truckDrive 1.6s cubic-bezier(0.55, 0, 0.1, 1) forwards;
+      }
+
+      .truck-login-button.ready .wheel {
+        animation: wheelSpin 1.6s linear forwards;
+      }
+
+      @keyframes truckDrive {
+        0% {
+          transform: translateX(-90px);
+        }
+        30% {
+          transform: translateX(10px);
+        }
+        70% {
+          transform: translateX(160px);
+        }
+        100% {
+          transform: translateX(260px);
+        }
+      }
+
+      @keyframes wheelSpin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(540deg);
+        }
+      }
+
+      .truck-login-button.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+
+      .status-pill {
+        position: absolute;
+        bottom: 4px;
+        right: 0;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.95);
+        color: #4caf50;
+        border: 1px solid rgba(76, 175, 80, 0.3);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glass-layer"></div>
+    <div class="medical-animation" id="medicalAnimation"></div>
+    <main class="login-shell">
+      <section class="side-panel">
+        <div class="logo-circle">
+          <div class="logo-inner">
+            <img
+              src="Gemini_Generated_Image_rgzoqzrgzoqzrgzo.png"
+              alt="LYF Medicine & Tablet Search Logo"
+              class="logo-image"
+            />
+          </div>
+        </div>
+        <div class="highlight-pill">AI-Powered Medicine & Tablet Search</div>
+        <div class="brand-heading">
+          <span>LYF</span>
+          <span>Access</span>
+        </div>
+        <p class="brand-subtitle">MEDICINE &amp; TABLET INSIGHTS · GLOBAL</p>
+        <p class="tagline">
+          LYF helps you identify medicines, verify doses, and discover safe
+          alternatives instantly with AI-powered global access.
+        </p>
+      </section>
+
+      <section class="form-panel">
+        <header>
+          <h1 class="form-title">Sign In</h1>
+          <p class="form-subtitle">
+            Enter your details to access your account.
+          </p>
+        </header>
+
+        <form id="signinForm" autocomplete="off" novalidate>
+          <div class="field-grid">
+            <div class="field">
+              <label for="name">Full Name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                class="text-input"
+                placeholder="Enter your full name"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="age">Age</label>
+              <input
+                id="age"
+                name="age"
+                type="number"
+                min="0"
+                max="120"
+                class="text-input"
+                placeholder="e.g. 32"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="gender">Gender</label>
+              <select id="gender" name="gender" class="select-input" required>
+                <option value="">Select gender</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other / Prefer not to say</option>
+              </select>
+            </div>
+            <div class="field full-width">
+              <label for="phone">Phone Number</label>
+              <div class="otp-section">
+                <div class="otp-input-wrapper">
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    class="text-input"
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </div>
+                <button type="button" id="sendOtpBtn" class="btn-send-otp">
+                  Send OTP
+                </button>
+              </div>
+            </div>
+            <div class="field full-width">
+              <label for="otp">OTP</label>
+              <input
+                id="otp"
+                name="otp"
+                type="text"
+                class="text-input"
+                placeholder="Enter 6-digit OTP"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="nav-link">
+            Don't have an account? <a href="signup.html">Sign Up</a>
+          </div>
+
+          <footer class="login-footer">
+            <p class="privacy-note">
+              Your information is secure and used only to provide accurate
+              medicine search results. We do not share your data with third parties.
+            </p>
+
+            <div class="truck-login-wrapper">
+              <button
+                id="truckLoginButton"
+                type="submit"
+                class="truck-login-button disabled"
+              >
+                <div class="road">
+                  <div class="road-label">
+                    <span>SIGN IN</span>
+                  </div>
+                </div>
+                <div class="truck">
+                  <div class="truck-body">
+                    <div class="truck-exhaust"></div>
+                  </div>
+                  <div class="truck-cab"></div>
+                  <div class="wheel wheel-back"></div>
+                  <div class="wheel wheel-front"></div>
+                </div>
+                <div id="statusPill" class="status-pill">Awaiting details</div>
+              </button>
+            </div>
+          </footer>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      // Medical Animation Setup
+      function createMedicalAnimation() {
+        const container = document.getElementById("medicalAnimation");
+        const sources = [
+          { type: "bottle", left: "10%" },
+          { type: "injection", left: "30%" },
+          { type: "bottle", left: "50%" },
+          { type: "injection", left: "70%" },
+          { type: "bottle", left: "90%" }
+        ];
+
+        sources.forEach((source, index) => {
+          const sourceEl = document.createElement("div");
+          sourceEl.className = "medicine-source";
+          sourceEl.style.left = source.left;
+          sourceEl.style.animationDelay = `${index * 0.5}s`;
+
+          if (source.type === "bottle") {
+            sourceEl.innerHTML = '<div class="bottle"></div>';
+          } else {
+            sourceEl.innerHTML = `
+              <div class="injection">
+                <div class="syringe-needle"></div>
+                <div class="syringe-body"></div>
+                <div class="syringe-plunger"></div>
+              </div>
+            `;
+          }
+
+          container.appendChild(sourceEl);
+
+          // Create dropping medicines
+          setInterval(() => {
+            const medicineTypes = ["capsule", "pill", "tablet"];
+            const medicineType = medicineTypes[Math.floor(Math.random() * medicineTypes.length)];
+            const medicine = document.createElement("div");
+            medicine.className = medicineType;
+
+            if (medicineType === "pill") {
+              const pillColors = ["pill-blue", "pill-red", "pill-yellow", "pill-green"];
+              medicine.className += " " + pillColors[Math.floor(Math.random() * pillColors.length)];
+            }
+
+            const sourceRect = sourceEl.getBoundingClientRect();
+            const leftOffset = sourceRect.left + sourceRect.width / 2;
+            medicine.style.left = `${leftOffset}px`;
+            medicine.style.top = `${sourceRect.top + sourceRect.height}px`;
+            medicine.style.animationDelay = "0s";
+            medicine.style.animationDuration = `${3 + Math.random() * 2}s`;
+            medicine.style.setProperty('--start-left', `${leftOffset}px`);
+
+            container.appendChild(medicine);
+
+            setTimeout(() => {
+              medicine.remove();
+            }, 5000);
+          }, 2000 + index * 400);
+        });
+      }
+
+      // Initialize animation on load
+      window.addEventListener("load", createMedicalAnimation);
+
+      const form = document.getElementById("signinForm");
+      const truckLoginButton = document.getElementById("truckLoginButton");
+      const statusPill = document.getElementById("statusPill");
+      const sendOtpBtn = document.getElementById("sendOtpBtn");
+      const phoneInput = document.getElementById("phone");
+      const otpInput = document.getElementById("otp");
+
+      let otpSent = false;
+      let generatedOtp = "";
+
+      // Load saved user data if available
+      const savedUserData = localStorage.getItem("lyfUserData");
+      if (savedUserData) {
+        try {
+          const userData = JSON.parse(savedUserData);
+          form.name.value = userData.name || "";
+          form.age.value = userData.age || "";
+          form.gender.value = userData.gender || "";
+          form.phone.value = userData.phone || "";
+        } catch (e) {
+          console.error("Error loading user data:", e);
+        }
+      }
+
+      // Generate random 6-digit OTP
+      function generateOTP() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+      }
+
+      // Send OTP (simulated)
+      sendOtpBtn.addEventListener("click", () => {
+        const phone = phoneInput.value.trim();
+        if (!phone) {
+          alert("Please enter your phone number first");
+          return;
+        }
+
+        if (!/^[0-9]{10,15}$/.test(phone.replace(/[\s\-\(\)]/g, ""))) {
+          alert("Please enter a valid phone number");
+          return;
+        }
+
+        generatedOtp = generateOTP();
+        otpSent = true;
+        sendOtpBtn.disabled = true;
+        sendOtpBtn.textContent = "OTP Sent";
+        statusPill.textContent = "OTP sent to phone";
+
+        // In real app, send OTP via SMS API
+        // For demo, show OTP in console/alert
+        console.log("OTP for " + phone + ": " + generatedOtp);
+        alert("OTP sent! (Demo OTP: " + generatedOtp + ")");
+
+        setTimeout(() => {
+          sendOtpBtn.textContent = "Resend OTP";
+          sendOtpBtn.disabled = false;
+        }, 30000);
+      });
+
+      function updateButtonState() {
+        const isValid = form.checkValidity() && otpSent;
+        if (isValid) {
+          truckLoginButton.classList.remove("disabled");
+          statusPill.textContent = "Ready to sign in";
+        } else {
+          truckLoginButton.classList.add("disabled");
+          if (!otpSent) {
+            statusPill.textContent = "Send OTP first";
+          } else {
+            statusPill.textContent = "Awaiting details";
+          }
+        }
+      }
+
+      // Validate OTP
+      otpInput.addEventListener("input", () => {
+        if (otpSent && otpInput.value === generatedOtp) {
+          otpInput.setCustomValidity("");
+        } else if (otpSent && otpInput.value.length === 6) {
+          otpInput.setCustomValidity("Invalid OTP");
+        } else {
+          otpInput.setCustomValidity("");
+        }
+        updateButtonState();
+      });
+
+      form.addEventListener("input", updateButtonState);
+      form.addEventListener("change", updateButtonState);
+      phoneInput.addEventListener("input", () => {
+        if (otpSent && phoneInput.value !== phoneInput.dataset.originalPhone) {
+          otpSent = false;
+          sendOtpBtn.textContent = "Send OTP";
+          generatedOtp = "";
+        }
+        updateButtonState();
+      });
+
+      updateButtonState();
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        if (!otpSent) {
+          alert("Please send OTP first");
+          return;
+        }
+
+        if (otpInput.value !== generatedOtp) {
+          alert("Invalid OTP. Please check and try again.");
+          otpInput.focus();
+          return;
+        }
+
+        // Update user data
+        const userData = {
+          name: form.name.value,
+          age: form.age.value,
+          gender: form.gender.value,
+          phone: form.phone.value,
+        };
+        localStorage.setItem("lyfUserData", JSON.stringify(userData));
+        localStorage.setItem("lyfSignedIn", "true");
+
+        // Trigger truck animation
+        truckLoginButton.classList.add("ready");
+        statusPill.textContent = "Signing in...";
+
+        // Navigate to login page after animation
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1600);
+      });
+    </script>
+  </body>
+</html>
+

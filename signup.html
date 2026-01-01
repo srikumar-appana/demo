@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LYF Medicine Search - Sign Up</title>
+    <style>
+      /* ---------- Global Styles ---------- */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top left, #4ad8ff, #001b33 60%),
+          radial-gradient(circle at bottom right, #72ffb7, #001020 60%);
+        color: #0b1020;
+        padding: 16px;
+      }
+
+      .glass-layer {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.12), transparent 60%),
+          radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.12), transparent 60%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+      }
+
+      /* ---------- Layout ---------- */
+      .login-shell {
+        position: relative;
+        width: min(960px, 100%);
+        max-width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        gap: 32px;
+        padding: 32px;
+        border-radius: 32px;
+        background: linear-gradient(135deg, rgba(11, 16, 32, 0.9), rgba(10, 60, 90, 0.9));
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+      }
+
+      @media (max-width: 840px) {
+        .login-shell {
+          grid-template-columns: 1fr;
+          padding: 24px 20px;
+          gap: 24px;
+        }
+
+        .side-panel {
+          order: -1;
+          padding: 12px 8px;
+          align-items: center;
+          text-align: center;
+        }
+
+        .logo-circle {
+          width: 180px;
+          height: 180px;
+          margin: 0 auto 12px;
+        }
+
+        .brand-heading {
+          font-size: 1.6rem;
+          justify-content: center;
+        }
+
+        .tagline {
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .login-shell {
+          padding: 20px 16px;
+          border-radius: 24px;
+        }
+
+        .form-panel {
+          padding: 20px 18px 22px;
+        }
+
+        .form-title {
+          font-size: 1.2rem;
+        }
+
+        .form-subtitle {
+          font-size: 0.85rem;
+        }
+
+        .logo-circle {
+          width: 160px;
+          height: 160px;
+        }
+
+        .brand-heading {
+          font-size: 1.4rem;
+        }
+
+        .truck-login-wrapper {
+          width: 100%;
+          max-width: 260px;
+        }
+      }
+
+      /* ---------- Brand / Left Panel ---------- */
+      .side-panel {
+        position: relative;
+        padding: 20px 12px 20px 4px;
+        color: #f4f7ff;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .logo-circle {
+        position: relative;
+        width: 210px;
+        height: 210px;
+        border-radius: 50%;
+        margin-bottom: 8px;
+        padding: 10px;
+        background: linear-gradient(135deg, rgba(10, 40, 80, 0.95), rgba(6, 15, 30, 0.95));
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 28px rgba(0, 0, 0, 0.55);
+      }
+
+      .logo-circle::before {
+        content: "";
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        background: conic-gradient(
+          from 0deg,
+          #ff6b6b,
+          #ffa94d,
+          #ffe066,
+          #8ce99a,
+          #74c0fc,
+          #9775fa,
+          #f783ff,
+          #ff6b6b
+        );
+        z-index: -1;
+        filter: blur(1px);
+      }
+
+      .logo-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #f8fbff, #1d2740 78%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.4);
+        padding: 12px;
+      }
+
+      .logo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.55));
+      }
+
+      .brand-heading {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+
+      .brand-heading span:first-child {
+        color: #72ffb7;
+      }
+
+      .brand-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: rgba(226, 239, 255, 0.7);
+      }
+
+      .tagline {
+        font-size: 0.95rem;
+        color: rgba(226, 239, 255, 0.8);
+        margin-top: 8px;
+      }
+
+      .highlight-pill {
+        align-self: flex-start;
+        padding: 4px 12px;
+        font-size: 0.78rem;
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        background: linear-gradient(135deg, #0cf, #7cffb7);
+        color: #021018;
+        font-weight: 600;
+      }
+
+      /* ---------- Form Panel ---------- */
+      .form-panel {
+        position: relative;
+        background: radial-gradient(circle at top, rgba(255, 255, 255, 0.1), transparent 55%),
+          radial-gradient(circle at bottom, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.95));
+        border-radius: 24px;
+        padding: 24px 22px 26px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+      }
+
+      .form-title {
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: #f8fbff;
+        margin-bottom: 4px;
+      }
+
+      .form-subtitle {
+        font-size: 0.9rem;
+        color: rgba(214, 230, 255, 0.8);
+        margin-bottom: 18px;
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 16px;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 480px) {
+        .field-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .field.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .field label {
+        font-size: 0.83rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: rgba(219, 233, 255, 0.7);
+      }
+
+      .text-input,
+      .select-input {
+        background: rgba(3, 13, 30, 0.85);
+        border-radius: 999px;
+        border: 1px solid rgba(132, 173, 255, 0.4);
+        padding: 9px 14px;
+        color: #f6fbff;
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .text-input:focus,
+      .select-input:focus {
+        border-color: #7cffb7;
+        box-shadow: 0 0 0 1px rgba(124, 255, 183, 0.25);
+        background: rgba(5, 18, 40, 0.95);
+      }
+
+      .text-input::placeholder {
+        color: rgba(182, 204, 240, 0.65);
+      }
+
+      .otp-section {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+      }
+
+      .otp-input-wrapper {
+        flex: 1;
+      }
+
+      .btn-send-otp {
+        padding: 9px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(149, 195, 255, 0.75);
+        background: rgba(1, 11, 30, 0.9);
+        color: #e7f0ff;
+        font-size: 0.79rem;
+        font-weight: 500;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.2s ease;
+      }
+
+      .btn-send-otp:hover {
+        background: rgba(14, 36, 80, 0.95);
+      }
+
+      .btn-send-otp:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .nav-link {
+        text-align: center;
+        margin-top: 16px;
+        font-size: 0.85rem;
+        color: rgba(214, 230, 255, 0.8);
+      }
+
+      .nav-link a {
+        color: #7cffb7;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.2s ease;
+      }
+
+      .nav-link a:hover {
+        color: #0cf;
+      }
+
+      /* ---------- Truck Login Button ---------- */
+      .login-footer {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .privacy-note {
+        font-size: 0.78rem;
+        color: rgba(189, 210, 245, 0.8);
+        max-width: 58%;
+      }
+
+      @media (max-width: 720px) {
+        .login-footer {
+          flex-direction: column;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .privacy-note {
+          max-width: 100%;
+          text-align: center;
+        }
+
+        .truck-login-wrapper {
+          width: 100%;
+          max-width: 280px;
+        }
+      }
+
+      .truck-login-wrapper {
+        position: relative;
+        width: 260px;
+        height: 70px;
+      }
+
+      .road {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 54%;
+        height: 5px;
+        transform: translateY(-50%);
+        background: linear-gradient(
+          to right,
+          #0cf,
+          #7cffb7,
+          #ffd43b,
+          #ff6b6b,
+          #0cf
+        );
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .road::after {
+        content: "";
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 1px;
+        height: 3px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0.4;
+      }
+
+      .road-label {
+        position: absolute;
+        inset: -24px 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.58em;
+        color: rgba(5, 15, 30, 0.9);
+        text-transform: uppercase;
+        mix-blend-mode: screen;
+        pointer-events: none;
+      }
+
+      .road-label span {
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+      }
+
+      .truck-login-button {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
+      }
+
+      .truck {
+        position: absolute;
+        top: 4px;
+        left: 0;
+        width: 120px;
+        height: 50px;
+        transform: translateX(-90px);
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        z-index: 1;
+      }
+
+      .truck-body {
+        position: relative;
+        flex: 1;
+        height: 38px;
+        border-radius: 10px 4px 6px 6px;
+        background: linear-gradient(135deg, #122a43, #0cf);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+          0 8px 18px rgba(0, 0, 0, 0.55);
+      }
+
+      .truck-body::after {
+        content: "LYF";
+        position: absolute;
+        top: 8px;
+        left: 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .truck-cab {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px 8px 6px 6px;
+        background: linear-gradient(135deg, #7cffb7, #0bc5ff);
+        position: relative;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+      }
+
+      .truck-cab::before {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 5px;
+        right: 5px;
+        height: 14px;
+        border-radius: 6px 6px 2px 2px;
+        background: linear-gradient(135deg, #cde7ff, #6ab4ff);
+      }
+
+      .truck-cab::after {
+        content: "";
+        position: absolute;
+        bottom: 4px;
+        right: -6px;
+        width: 10px;
+        height: 8px;
+        border-radius: 4px;
+        background: #ffef96;
+        box-shadow: 0 0 8px rgba(255, 239, 150, 0.9);
+      }
+
+      .truck-exhaust {
+        position: absolute;
+        width: 6px;
+        height: 18px;
+        background: #0d1726;
+        right: -10px;
+        bottom: 10px;
+        border-radius: 2px;
+      }
+
+      .wheel {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #3a4a5f, #03070e);
+        bottom: -9px;
+        border: 2px solid #0cf;
+      }
+
+      .wheel::after {
+        content: "";
+        position: absolute;
+        inset: 3px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .wheel-back {
+        left: 20px;
+      }
+
+      .wheel-front {
+        right: 8px;
+      }
+
+      /* Truck animation */
+      .truck-login-button.ready .truck {
+        animation: truckDrive 1.6s cubic-bezier(0.55, 0, 0.1, 1) forwards;
+      }
+
+      .truck-login-button.ready .wheel {
+        animation: wheelSpin 1.6s linear forwards;
+      }
+
+      @keyframes truckDrive {
+        0% {
+          transform: translateX(-90px);
+        }
+        30% {
+          transform: translateX(10px);
+        }
+        70% {
+          transform: translateX(160px);
+        }
+        100% {
+          transform: translateX(260px);
+        }
+      }
+
+      @keyframes wheelSpin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(540deg);
+        }
+      }
+
+      .truck-login-button.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+
+      .status-pill {
+        position: absolute;
+        bottom: 4px;
+        right: 0;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        background: rgba(2, 14, 30, 0.9);
+        color: rgba(208, 226, 255, 0.92);
+        border: 1px solid rgba(140, 176, 235, 0.7);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glass-layer"></div>
+    <main class="login-shell">
+      <section class="side-panel">
+        <div class="logo-circle">
+          <div class="logo-inner">
+            <img
+              src="Gemini_Generated_Image_rgzoqzrgzoqzrgzo.png"
+              alt="LYF Medicine & Tablet Search Logo"
+              class="logo-image"
+            />
+          </div>
+        </div>
+        <div class="highlight-pill">AI-Powered Medicine & Tablet Search</div>
+        <div class="brand-heading">
+          <span>LYF</span>
+          <span>Access</span>
+        </div>
+        <p class="brand-subtitle">MEDICINE &amp; TABLET INSIGHTS · GLOBAL</p>
+        <p class="tagline">
+          LYF helps you identify medicines, verify doses, and discover safe
+          alternatives instantly with AI-powered global access.
+        </p>
+      </section>
+
+      <section class="form-panel">
+        <header>
+          <h1 class="form-title">Create Account</h1>
+          <p class="form-subtitle">
+            Sign up to access medicine search features.
+          </p>
+        </header>
+
+        <form id="signupForm" autocomplete="off" novalidate>
+          <div class="field-grid">
+            <div class="field">
+              <label for="name">Full Name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                class="text-input"
+                placeholder="Enter your full name"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="age">Age</label>
+              <input
+                id="age"
+                name="age"
+                type="number"
+                min="0"
+                max="120"
+                class="text-input"
+                placeholder="e.g. 32"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="gender">Gender</label>
+              <select id="gender" name="gender" class="select-input" required>
+                <option value="">Select gender</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other / Prefer not to say</option>
+              </select>
+            </div>
+            <div class="field full-width">
+              <label for="phone">Phone Number</label>
+              <div class="otp-section">
+                <div class="otp-input-wrapper">
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    class="text-input"
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </div>
+                <button type="button" id="sendOtpBtn" class="btn-send-otp">
+                  Send OTP
+                </button>
+              </div>
+            </div>
+            <div class="field full-width">
+              <label for="otp">OTP</label>
+              <input
+                id="otp"
+                name="otp"
+                type="text"
+                class="text-input"
+                placeholder="Enter 6-digit OTP"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="nav-link">
+            Already have an account? <a href="signin.html">Sign In</a>
+          </div>
+
+          <footer class="login-footer">
+            <p class="privacy-note">
+              Your information is secure and used only to provide accurate
+              medicine search results. We do not share your data with third parties.
+            </p>
+
+            <div class="truck-login-wrapper">
+              <button
+                id="truckLoginButton"
+                type="submit"
+                class="truck-login-button disabled"
+              >
+                <div class="road">
+                  <div class="road-label">
+                    <span>SIGN UP</span>
+                  </div>
+                </div>
+                <div class="truck">
+                  <div class="truck-body">
+                    <div class="truck-exhaust"></div>
+                  </div>
+                  <div class="truck-cab"></div>
+                  <div class="wheel wheel-back"></div>
+                  <div class="wheel wheel-front"></div>
+                </div>
+                <div id="statusPill" class="status-pill">Awaiting details</div>
+              </button>
+            </div>
+          </footer>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      const form = document.getElementById("signupForm");
+      const truckLoginButton = document.getElementById("truckLoginButton");
+      const statusPill = document.getElementById("statusPill");
+      const sendOtpBtn = document.getElementById("sendOtpBtn");
+      const phoneInput = document.getElementById("phone");
+      const otpInput = document.getElementById("otp");
+
+      let otpSent = false;
+      let generatedOtp = "";
+
+      // Generate random 6-digit OTP
+      function generateOTP() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+      }
+
+      // Send OTP (simulated)
+      sendOtpBtn.addEventListener("click", () => {
+        const phone = phoneInput.value.trim();
+        if (!phone) {
+          alert("Please enter your phone number first");
+          return;
+        }
+
+        if (!/^[0-9]{10,15}$/.test(phone.replace(/[\s\-\(\)]/g, ""))) {
+          alert("Please enter a valid phone number");
+          return;
+        }
+
+        generatedOtp = generateOTP();
+        otpSent = true;
+        sendOtpBtn.disabled = true;
+        sendOtpBtn.textContent = "OTP Sent";
+        statusPill.textContent = "OTP sent to phone";
+
+        // In real app, send OTP via SMS API
+        // For demo, show OTP in console/alert
+        console.log("OTP for " + phone + ": " + generatedOtp);
+        alert("OTP sent! (Demo OTP: " + generatedOtp + ")");
+
+        setTimeout(() => {
+          sendOtpBtn.textContent = "Resend OTP";
+          sendOtpBtn.disabled = false;
+        }, 30000);
+      });
+
+      function updateButtonState() {
+        const isValid = form.checkValidity() && otpSent;
+        if (isValid) {
+          truckLoginButton.classList.remove("disabled");
+          statusPill.textContent = "Ready to sign up";
+        } else {
+          truckLoginButton.classList.add("disabled");
+          if (!otpSent) {
+            statusPill.textContent = "Send OTP first";
+          } else {
+            statusPill.textContent = "Awaiting details";
+          }
+        }
+      }
+
+      // Validate OTP
+      otpInput.addEventListener("input", () => {
+        if (otpSent && otpInput.value === generatedOtp) {
+          otpInput.setCustomValidity("");
+        } else if (otpSent && otpInput.value.length === 6) {
+          otpInput.setCustomValidity("Invalid OTP");
+        } else {
+          otpInput.setCustomValidity("");
+        }
+        updateButtonState();
+      });
+
+      form.addEventListener("input", updateButtonState);
+      form.addEventListener("change", updateButtonState);
+      phoneInput.addEventListener("input", () => {
+        if (otpSent && phoneInput.value !== phoneInput.dataset.originalPhone) {
+          otpSent = false;
+          sendOtpBtn.textContent = "Send OTP";
+          generatedOtp = "";
+        }
+        updateButtonState();
+      });
+
+      updateButtonState();
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        if (!otpSent) {
+          alert("Please send OTP first");
+          return;
+        }
+
+        if (otpInput.value !== generatedOtp) {
+          alert("Invalid OTP. Please check and try again.");
+          otpInput.focus();
+          return;
+        }
+
+        // Store user data
+        const userData = {
+          name: form.name.value,
+          age: form.age.value,
+          gender: form.gender.value,
+          phone: form.phone.value,
+        };
+        localStorage.setItem("lyfUserData", JSON.stringify(userData));
+        localStorage.setItem("lyfSignedUp", "true");
+
+        // Trigger truck animation
+        truckLoginButton.classList.add("ready");
+        statusPill.textContent = "Signing up...";
+
+        // Navigate to sign-in page after animation
+        setTimeout(() => {
+          window.location.href = "signin.html";
+        }, 1600);
+      });
+    </script>
+  </body>
+</html>
+
